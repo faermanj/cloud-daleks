@@ -15,20 +15,17 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         
         <!-- Plugin versions -->
-        <compiler-plugin.version>3.13.0</compiler-plugin.version>
-        <surefire-plugin.version>3.5.0</surefire-plugin.version>
-        <clean-plugin.version>3.4.0</clean-plugin.version>
-        <resources-plugin.version>3.3.1</resources-plugin.version>
-        <jar-plugin.version>3.4.2</jar-plugin.version>
-        
+        <compiler-plugin.version>3.14.1</compiler-plugin.version>
+        <surefire-plugin.version>3.5.4</surefire-plugin.version>
+
         <!-- Quarkus -->
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-        <quarkus.platform.version>3.15.1</quarkus.platform.version>
+        <quarkus.platform.version>3.16.4</quarkus.platform.version>
         
         <!-- Dependencies -->
         <datafaker.version>2.1.0</datafaker.version>
-        <aws-sdk.version>2.35.6</aws-sdk.version>
+        <aws-sdk.version>2.28.11</aws-sdk.version>
         
         <!-- Test settings -->
         <skipITs>true</skipITs>
@@ -115,20 +112,7 @@
                     </executions>
                 </plugin>
                 
-                <plugin>
-                    <artifactId>maven-clean-plugin</artifactId>
-                    <version>${clean-plugin.version}</version>
-                </plugin>
-                
-                <plugin>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>${resources-plugin.version}</version>
-                </plugin>
-                
-                <plugin>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>${jar-plugin.version}</version>
-                </plugin>
+
             </plugins>
         </pluginManagement>
     </build>

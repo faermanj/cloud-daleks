@@ -1,7 +1,6 @@
 
 package exterminate;
 
-import exterminate.model.CloudResource;
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import java.util.List;

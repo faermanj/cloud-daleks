@@ -1,17 +1,23 @@
 package exterminate.providers.aws.cloudformation;
 
 import exterminate.Execution;
-import exterminate.model.CloudResource;
-import exterminate.model.Seek;
-import exterminate.model.SeekFor;
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
+import seek.Seek;
+import seek.SeekTarget;
+import seek.SeekTargets;
+import seek.Seeker;
 import software.amazon.awssdk.services.cloudformation.CloudFormationClient;
 import software.amazon.awssdk.services.cloudformation.model.ListStacksRequest;
 
 @Dependent
-@SeekFor(provider = "AWS", service = "CloudFormation", resourceType = "Stack")
-public class StackSeek implements Seek {
+@SeekTargets({
+    @SeekTarget(name="provider", value = "aws"),
+    @SeekTarget(name="service", value = "cloudformation"),
+    @SeekTarget(name="resourceType", value = "stack")
+})
+public class StackSeek extends Seeker{
 
     @Inject
     Execution execution;
@@ -28,31 +34,12 @@ public class StackSeek implements Seek {
             var response = cfClient.listStacks(request);
 
             for (var stack : response.stackSummaries()) {
-                var resource = new CloudResource("AWS", "CloudFormation", "Stack", stack.stackName());
-                execution.addCloudResource(resource);
+                Log.infof("TODO: add stack to index");
             }
         } catch (Exception e) {
             System.err.println("Error listing stacks: " + e.getMessage());
         }
     }
 
-    @Override
-    public void setParent(CloudResource parent) {
-        // Not used in this implementation
-    }
 
-    @Override
-    public void setProvider(String provider) {
-        // Not used in this implementation
-    }
-
-    @Override
-    public void setService(String service) {
-        // Not used in this implementation
-    }
-
-    @Override
-    public void setResourceType(String resourceType) {
-        // Not used in this implementation
-    }
 }

@@ -12,8 +12,7 @@ public class CloudResource {
         this(null, provider, serviceName, resourceType, name, name);
     }
 
-    public CloudResource(CloudResource parent, String provider, String serviceName, String resourceType, String name,
-            String resourceId) {
+    public CloudResource(CloudResource parent, String provider, String serviceName, String resourceType, String name, String resourceId) {
         this.parent = parent;
         this.provider = provider;
         this.serviceName = serviceName;
@@ -48,7 +47,7 @@ public class CloudResource {
 
     @Override
     public String toString() {
-        return String.format("CloudResource{parent='%s', provider='%s', service='%s', type='%s', name='%s', id='%s'}",
-                parent != null ? parent.getName() : "null", provider, serviceName, resourceType, name, resourceId);
+        return String.format("CloudResource{parent='%s', provider='%s', service='%s', type='%s', name='%s', id='%s'}", 
+            parent != null ? parent.getName() : "null", provider, serviceName, resourceType, name, resourceId);
     }
 }

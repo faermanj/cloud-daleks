@@ -2,14 +2,15 @@ package exterminate;
 
 import exterminate.config.ExterminateConfig;
 import exterminate.model.CloudResource;
-import exterminate.model.Seek;
-import exterminate.model.SeekFor;
 import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Any;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
-import java.util.ArrayList;
+import seek.Seek;
+import seek.SeekContext;
+import seek.SeekTarget;
+
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -18,7 +19,8 @@ public class Execution {
     @Inject
     ExterminateConfig config;
 
-    @Inject @Any //TODO: Specific inject
+    @Inject
+    @Any // TODO: Specific inject
     Instance<Seek> seekerInstance;
 
     private final List<CloudResource> cloudResources = new CopyOnWriteArrayList<>();
@@ -28,42 +30,55 @@ public class Execution {
     }
 
     public List<CloudResource> getCloudResources() {
-        return new ArrayList<>(cloudResources);
+        return List.copyOf(cloudResources);
     }
 
     public void clearCloudResources() {
         cloudResources.clear();
     }
 
-    public void seek(CloudResource parent, String provider, String service, String resourceType) {
-        Log.infof("Seeking [%s %s %s %s]", parent, provider, service, resourceType);
-        seekerInstance.stream()
-            .filter((s) -> matchesSeeker(s, provider, service, resourceType))
-            .forEach((s) -> run(s, parent, provider, service, resourceType));
+    public void seek(SeekContext seekContext) {
+        Log.infof("Seeking [%s]", seekContext);
+        List<Seek> seekers = seekerInstance.stream()
+                .filter((s) -> matchesSeeker(s, seekContext))
+                .toList();
+        Log.infof("Matched [%s] seekers", seekers.size());
+        seekers.forEach((s) -> run(s, seekContext));
     }
-    
 
-    private void run(Seek seeker, CloudResource parent, String provider, String service, String resourceType) {
-        Log.infof("Running seek [%s %s %s %s]", parent, provider, service, resourceType);
-        seeker.setParent(parent);
-        seeker.setProvider(provider);
-        seeker.setService(service);
-        seeker.setResourceType(resourceType);
+    private void run(Seek seeker, SeekContext seekContext) {
+        Log.infof("Running seeker [%s] with context [%s]", seeker.getClass().getSimpleName(), seekContext);
+        seeker.setContext(seekContext);
         seeker.run();
     }
 
-    private boolean matchesSeeker(Seek seeker, String provider, String service, String resourceType) {
-        Log.infof("Matching seek [%s] [%s %s %s]", seeker, provider, service, resourceType);
-        var seekForAnnotation = seeker.getClass().getAnnotation(SeekFor.class);
+    private boolean matchesSeeker(Seek seeker, SeekContext seekContext) {
+        var context = seekContext.getContextMap();
+        Log.infof("Matching seek [%s] context [%s]", seeker.getClass().getSimpleName(), context);
 
-        if (seekForAnnotation == null) {
-            Log.infof("Seeker [%s] not annotated", seeker);
-            return false;
+        // Fetch all SeekTarget annotations from the seeker class
+        var seekTargets = seeker.getClass().getAnnotationsByType(SeekTarget.class);
+
+        // Convert SeekTarget annotations to a map for easier lookup
+        var seekerAttributes = new java.util.HashMap<String, String>();
+        for (var target : seekTargets) {
+            seekerAttributes.put(target.name(), target.value());
         }
-        var matches = seekForAnnotation.provider().equalsIgnoreCase(provider) &&
-                seekForAnnotation.service().equalsIgnoreCase(service) &&
-                seekForAnnotation.resourceType().equalsIgnoreCase(resourceType);
-        Log.infof("Seeker [%s] matches [%s %s %s]: [%s]", seeker, provider, service, resourceType, matches);
+
+        Log.infof("Seeker attributes: %s", seekerAttributes);
+
+        // Check if all entries in the context map match the seeker's attributes
+        var matches = context.entrySet().stream()
+                .allMatch(entry -> {
+                    var seekerValue = seekerAttributes.get(entry.getKey());
+                    var contextValue = entry.getValue();
+                    var isMatch = seekerValue != null && seekerValue.equalsIgnoreCase(contextValue);
+                    Log.infof("Checking %s: seeker=%s, context=%s, match=%s",
+                            entry.getKey(), seekerValue, contextValue, isMatch);
+                    return isMatch;
+                });
+
+        Log.infof("Overall match result: %s", matches);
         return matches;
     }
 

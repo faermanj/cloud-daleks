@@ -3,11 +3,12 @@ package exterminate.tasks;
 import java.util.concurrent.Callable;
 
 import exterminate.Execution;
-import exterminate.model.Seek;
 import io.quarkus.logging.Log;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
+import seek.Seek;
+import seek.SeekContext;
 
 @Dependent
 public class ExterminateTask implements Callable<Void> {
@@ -38,7 +39,7 @@ public class ExterminateTask implements Callable<Void> {
         Log.info("Starting resource discovery...");
 
         // Seek for AWS regions specifically
-        execution.seek(null , "AWS", "Regions", "Region");
+        execution.seek(SeekContext.of("provider", "aws"));
 
 
 
