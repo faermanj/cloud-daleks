@@ -1,0 +1,21 @@
+{
+  "name": "Anonymaise Dev Container",
+  "image": "mcr.microsoft.com/devcontainers/base",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/java:1": {
+      "jdkDistro": "graalce",
+      "installMaven": "true"
+    }
+  },
+  "postCreateCommand": "source ./devcontainer/postCreateCommand.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "aws-scripting-guy.cform",
+        "vscjava.vscode-java-pack",
+        "redhat.java"
+      ]
+    }
+  }
+}

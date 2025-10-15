@@ -1,0 +1,5 @@
+package exterminate;
+
+class ExterminateUtils{
+    
+}

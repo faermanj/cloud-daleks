@@ -1,0 +1,88 @@
+[[34;1mINFO[0m] Scanning for projects...
+[[33;1mWARNING[0m] 16 problems were encountered while building the effective model for 'io.smallrye.config:smallrye-config:jar:3.13.4' during dependency collection step for plugin (use -X to see details)
+[[33;1mWARNING[0m] 1 problem was encountered while building the effective model for 'io.quarkus.qute:qute-core:jar:3.28.3' during dependency collection step for plugin (use -X to see details)
+[[33;1mWARNING[0m] 16 problems were encountered while building the effective model for 'io.smallrye.config:smallrye-config-core:jar:3.13.4' during dependency collection step for plugin (use -X to see details)
+[[33;1mWARNING[0m] 16 problems were encountered while building the effective model for 'io.smallrye.config:smallrye-config-common:jar:3.13.4' during dependency collection step for plugin (use -X to see details)
+[[34;1mINFO[0m] [1m----------------------------------------------------------------------------------------------------[0m
+[[34;1mINFO[0m] [1mReactor Build Order:[0m
+[[34;1mINFO[0m] 
+[[34;1mINFO[0m] cloud-daleks                                                                                   [pom]
+[[34;1mINFO[0m] exterminate                                                                                    [jar]
+[[34;1mINFO[0m] 
+[[34;1mINFO[0m] [1m-----------------------------------< [36;22mcloud-daleks:cloud-daleks[39;1m >------------------------------------[0m
+[[34;1mINFO[0m] [1mBuilding cloud-daleks 1.0.0-SNAPSHOT                                                           [1/2][0m
+[[34;1mINFO[0m]   from pom.xml
+[[34;1mINFO[0m] [1m----------------------------------------------[ pom ]-----------------------------------------------[0m
+[[34;1mINFO[0m] 
+[[34;1mINFO[0m] [1m--- [32;22mclean:3.4.0:clean[0m [1m(default-clean)[0m @ [36mcloud-daleks[39;1m ---[0m
+[[34;1mINFO[0m] Deleting /home/julio/src/faermanj/cloud-daleks/target
+[[34;1mINFO[0m] 
+[[34;1mINFO[0m] [1m------------------------------------< [36;22mcloud-daleks:exterminate[39;1m >------------------------------------[0m
+[[34;1mINFO[0m] [1mBuilding exterminate 1.0.0-SNAPSHOT                                                            [2/2][0m
+[[34;1mINFO[0m]   from exterminate/pom.xml
+[[34;1mINFO[0m] [1m----------------------------------------------[ jar ]-----------------------------------------------[0m
+[[33;1mWARNING[0m] 1 problem was encountered while building the effective model for 'io.quarkus.arc:arc:jar:3.28.3' during dependency collection step for project (use -X to see details)
+[[33;1mWARNING[0m] 1 problem was encountered while building the effective model for 'org.jboss.narayana.jts:narayana-jts-integration:jar:7.2.2.Final' during dependency collection step for project (use -X to see details)
+[[34;1mINFO[0m] 
+[[34;1mINFO[0m] [1m--- [32;22mclean:3.4.0:clean[0m [1m(default-clean)[0m @ [36mexterminate[39;1m ---[0m
+[[34;1mINFO[0m] Deleting /home/julio/src/faermanj/cloud-daleks/exterminate/target
+[[34;1mINFO[0m] 
+[[34;1mINFO[0m] [1m--- [32;22mresources:3.3.1:resources[0m [1m(default-resources)[0m @ [36mexterminate[39;1m ---[0m
+[[34;1mINFO[0m] Copying 2 resources from src/main/resources to target/classes
+[[34;1mINFO[0m] skip non existing resourceDirectory /home/julio/src/faermanj/cloud-daleks/exterminate/src/main/resources-filtered
+[[34;1mINFO[0m] 
+[[34;1mINFO[0m] [1m--- [32;22mquarkus:3.28.3:generate-code[0m [1m(default)[0m @ [36mexterminate[39;1m ---[0m
+[[33;1mWARNING[0m] 1 problem was encountered while building the effective model for 'io.quarkus.arc:arc-processor:jar:3.28.3' during dependency collection step for  (use -X to see details)
+[[33;1mWARNING[0m] 1 problem was encountered while building the effective model for 'io.quarkus.arc:arc-processor:jar:3.28.3' during dependency collection step for  (use -X to see details)
+[[33;1mWARNING[0m] 1 problem was encountered while building the effective model for 'io.quarkus.resteasy.reactive:resteasy-reactive-processor:jar:3.28.3' during dependency collection step for  (use -X to see details)
+[[33;1mWARNING[0m] 1 problem was encountered while building the effective model for 'io.quarkus.resteasy.reactive:resteasy-reactive-processor:jar:3.28.3' during dependency collection step for  (use -X to see details)
+[[33;1mWARNING[0m] 1 problem was encountered while building the effective model for 'io.quarkus.resteasy.reactive:resteasy-reactive:jar:3.28.3' during dependency collection step for  (use -X to see details)
+[[33;1mWARNING[0m] 1 problem was encountered while building the effective model for 'io.quarkus.resteasy.reactive:resteasy-reactive-common-processor:jar:3.28.3' during dependency collection step for  (use -X to see details)
+[[33;1mWARNING[0m] 1 problem was encountered while building the effective model for 'io.quarkus.resteasy.reactive:resteasy-reactive-common:jar:3.28.3' during dependency collection step for  (use -X to see details)
+[[33;1mWARNING[0m] 1 problem was encountered while building the effective model for 'io.quarkus.resteasy.reactive:resteasy-reactive-common-types:jar:3.28.3' during dependency collection step for  (use -X to see details)
+[[34;1mINFO[0m] 
+[[34;1mINFO[0m] [1m--- [32;22mcompiler:3.13.0:compile[0m [1m(default-compile)[0m @ [36mexterminate[39;1m ---[0m
+[[34;1mINFO[0m] Recompiling the module because of [1madded or removed source files[m.
+[[34;1mINFO[0m] Compiling 13 source files with javac [debug parameters release 21] to target/classes
+[[34;1mINFO[0m] 
+[[34;1mINFO[0m] [1m--- [32;22mquarkus:3.28.3:generate-code-tests[0m [1m(default)[0m @ [36mexterminate[39;1m ---[0m
+[[34;1mINFO[0m] 
+[[34;1mINFO[0m] [1m--- [32;22mresources:3.3.1:testResources[0m [1m(default-testResources)[0m @ [36mexterminate[39;1m ---[0m
+[[34;1mINFO[0m] skip non existing resourceDirectory /home/julio/src/faermanj/cloud-daleks/exterminate/src/test/resources
+[[34;1mINFO[0m] skip non existing resourceDirectory /home/julio/src/faermanj/cloud-daleks/exterminate/src/test/resources-filtered
+[[34;1mINFO[0m] 
+[[34;1mINFO[0m] [1m--- [32;22mcompiler:3.13.0:testCompile[0m [1m(default-testCompile)[0m @ [36mexterminate[39;1m ---[0m
+[[34;1mINFO[0m] No sources to compile
+[[34;1mINFO[0m] 
+[[34;1mINFO[0m] [1m--- [32;22msurefire:3.5.0:test[0m [1m(default-test)[0m @ [36mexterminate[39;1m ---[0m
+[[34;1mINFO[0m] Tests are skipped.
+[[34;1mINFO[0m] 
+[[34;1mINFO[0m] [1m--- [32;22mjar:3.4.2:jar[0m [1m(default-jar)[0m @ [36mexterminate[39;1m ---[0m
+[[34;1mINFO[0m] Building jar: /home/julio/src/faermanj/cloud-daleks/exterminate/target/exterminate.jar
+[[34;1mINFO[0m] 
+[[34;1mINFO[0m] [1m--- [32;22mquarkus:3.28.3:build[0m [1m(default)[0m @ [36mexterminate[39;1m ---[0m
+[[33;1mWARNING[0m] [1m[[0;36mio.quarkus.hibernate.orm.deployment.HibernateOrmProcessor[0;1m][m Hibernate ORM is disabled because no JPA entities were found
+[[34;1mINFO[0m] [1m[[0;36mio.quarkus.deployment.QuarkusAugmentor[0;1m][m Quarkus augmentation completed in 1342ms
+[[34;1mINFO[0m] 
+[[34;1mINFO[0m] [1m--- [32;22mfailsafe:3.5.0:integration-test[0m [1m(default)[0m @ [36mexterminate[39;1m ---[0m
+[[34;1mINFO[0m] Tests are skipped.
+[[34;1mINFO[0m] 
+[[34;1mINFO[0m] [1m--- [32;22mquarkus:3.28.3:native-image-agent[0m [1m(default)[0m @ [36mexterminate[39;1m ---[0m
+[[34;1mINFO[0m] Missing native-image-agent-base-config directory with native image agent configuration to transform
+[[34;1mINFO[0m] 
+[[34;1mINFO[0m] [1m--- [32;22mfailsafe:3.5.0:verify[0m [1m(default)[0m @ [36mexterminate[39;1m ---[0m
+[[34;1mINFO[0m] Tests are skipped.
+[[34;1mINFO[0m] Copying cloud-daleks:exterminate:pom:1.0.0-SNAPSHOT to project local repository
+[[34;1mINFO[0m] Copying cloud-daleks:exterminate:jar:1.0.0-SNAPSHOT to project local repository
+[[34;1mINFO[0m] Copying cloud-daleks:exterminate:pom:consumer:1.0.0-SNAPSHOT to project local repository
+[[34;1mINFO[0m] [1m----------------------------------------------------------------------------------------------------[0m
+[[34;1mINFO[0m] [1mReactor Summary for cloud-daleks 1.0.0-SNAPSHOT:[0m
+[[34;1mINFO[0m] 
+[[34;1mINFO[0m] cloud-daleks ................................................................... [32;1mSUCCESS[0m [  0.073 s]
+[[34;1mINFO[0m] exterminate .................................................................... [32;1mSUCCESS[0m [  3.974 s]
+[[34;1mINFO[0m] [1m----------------------------------------------------------------------------------------------------[0m
+[[34;1mINFO[0m] [32;1mBUILD SUCCESS[0m
+[[34;1mINFO[0m] [1m----------------------------------------------------------------------------------------------------[0m
+[[34;1mINFO[0m] Total time:  4.711 s
+[[34;1mINFO[0m] Finished at: 2025-10-15T16:21:47+02:00
+[[34;1mINFO[0m] [1m----------------------------------------------------------------------------------------------------[0m
