@@ -1,21 +1,7 @@
 package seek;
 
-import io.quarkus.logging.Log;
+import java.util.List;
 
-public class Seeker implements Seek {
-    SeekContext context;
-
-    public SeekContext getContext() {
-        return context;
-    }
-
-    public void setContext(SeekContext context) {
-        this.context = context;
-    }
-    
-    @Override
-    public void run() {
-        Log.info("SEEK RUN %s".formatted(context));
-    }
-
+public interface Seeker  {
+    List<SeekContext> seek(SeekContext context);
 }

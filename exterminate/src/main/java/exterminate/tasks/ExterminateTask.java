@@ -7,7 +7,7 @@ import io.quarkus.logging.Log;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
-import seek.Seek;
+import seek.Seeker;
 import seek.SeekContext;
 
 @Dependent
@@ -16,7 +16,7 @@ public class ExterminateTask implements Callable<Void> {
     Execution execution;
 
     @Inject
-    Instance<Seek> seekers;
+    Instance<Seeker> seekers;
 
     @Override
     public Void call() throws Exception {

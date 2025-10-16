@@ -1,13 +1,14 @@
 package seek;
 
+import scar.Context;
+
 import java.util.HashMap;
 import java.util.Map;
 
-public class SeekContext {
-    Map<String, String> context;
+public class SeekContext extends Context {
 
     private SeekContext(Map<String, String> context){
-        this.context = context;
+        super(context);
     }
 
     public static final SeekContext of(String key, String value){
@@ -17,7 +18,7 @@ public class SeekContext {
 
     public SeekContext with(Map<String, String> contextMap) {
         var union = new HashMap<String,String>();
-        union.putAll(context);
+        union.putAll(getContextMap());
         union.putAll(contextMap);
         return new SeekContext(union);
     }
@@ -30,8 +31,6 @@ public class SeekContext {
         return with(Map.of(k1,v1,k2,v2));
     }
 
-    public Map<String,String> getContextMap() {
-        return context;
-    }
+
 
 }

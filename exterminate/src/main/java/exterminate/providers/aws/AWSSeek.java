@@ -1,15 +1,21 @@
 package exterminate.providers.aws;
 
 import seek.SeekContext;
-import seek.SeekTarget;
-import seek.Seeker;
+import seek.Seek;
 
-@SeekTarget(name = "provider", value = "aws")
-public class AWSSeek extends Seeker {
+import java.util.List;
 
-    public SeekContext seek(SeekContext context) {
-        return context.with(
+import jakarta.enterprise.context.Dependent;
+import seek.ContextSeeker;
+
+@Dependent
+@Seek(name = "provider", value = "aws")
+public class AWSSeek extends ContextSeeker {
+
+    @Override
+    public List<SeekContext> seek(SeekContext context) {
+        return List.of(context.with(
                 "service", "ec2",
-                "resourceType", "region");
+                "resourceType", "region"));
     }
 }

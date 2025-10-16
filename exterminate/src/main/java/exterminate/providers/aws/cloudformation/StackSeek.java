@@ -5,27 +5,17 @@ import io.quarkus.logging.Log;
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import seek.Seek;
-import seek.SeekTarget;
-import seek.SeekTargets;
-import seek.Seeker;
+import seek.ContextSeeker;
 import software.amazon.awssdk.services.cloudformation.CloudFormationClient;
 import software.amazon.awssdk.services.cloudformation.model.ListStacksRequest;
 
 @Dependent
-@SeekTargets({
-    @SeekTarget(name="provider", value = "aws"),
-    @SeekTarget(name="service", value = "cloudformation"),
-    @SeekTarget(name="resourceType", value = "stack")
-})
-public class StackSeek extends Seeker{
+@Seek(name = "provider", value = "aws")
+@Seek(name = "service", value = "cloudformation")
+@Seek(name = "resourceType", value = "stack")
+public class StackSeek extends ContextSeeker {
 
-    @Inject
-    Execution execution;
 
-    @Override
-    public void run() {
-        listAllStacks();
-    }
 
     public void listAllStacks() {
         try (var cfClient = CloudFormationClient.create()) {
