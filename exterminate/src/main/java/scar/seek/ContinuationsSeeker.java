@@ -1,19 +1,44 @@
 package scar.seek;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public abstract class ContextSeeker implements Seeker {
-
+public abstract class ContinuationsSeeker implements Seeker {
+    List<SeekContext> continuations = new ArrayList<>();
+    SeekContext context;
 
     public List<SeekContext> seek(SeekContext context) {
-        return List.of(context);
+        this.context = context;
+        continuations.clear();
+        onSeek();
+        return continuations;
+    }
+
+    protected void onSeek() {
+    }
+
+    protected void addall(List<SeekContext> continuations) {
+        this.continuations.addAll(continuations);
+    }
+
+    protected SeekContext getContext() {
+        return context;
     }
 
     @Override
     public String toString() {
         return toJSON();
+    }
+
+    protected void add(List<SeekContext> continuations) {
+        addall(continuations);
+    }
+
+    protected void add(String k1, String v1, String k2, String v2) {
+        var continuations = context.with(k1, v1, k2, v2);
+        addall(continuations);
     }
 
     public String toJSON() {

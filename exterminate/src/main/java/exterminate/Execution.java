@@ -36,7 +36,7 @@ public class Execution {
         seekers.forEach((s) -> run(s, seekContext));
     }
 
-    private void throttle() {
+    public void throttle() {
         try {
             Thread.sleep(config.throttle());
         } catch (InterruptedException e) {
@@ -48,6 +48,7 @@ public class Execution {
     private void run(Seeker seeker, SeekContext seekContext) {
         Log.infof("Running seeker [%s] with context [%s]", seeker.getClass().getSimpleName(), seekContext);
         var found = seeker.seek(seekContext);
+        Log.infof("   Seeker [%s] found [%s] continuations: %s", seeker.getClass().getSimpleName(), found.size(), found);
         found.forEach(this::seek);
     }
 

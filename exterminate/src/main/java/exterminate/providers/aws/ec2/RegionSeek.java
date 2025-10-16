@@ -1,37 +1,34 @@
 package exterminate.providers.aws.ec2;
 
-import java.util.ArrayList;
-import java.util.List;
+import static exterminate.scar.SeekSymbols.AWS;
+import static exterminate.scar.SeekSymbols.EC2;
+import static exterminate.scar.SeekSymbols.PROVIDER;
+import static exterminate.scar.SeekSymbols.REGION;
+import static exterminate.scar.SeekSymbols.RESOURCE_TYPE;
+import static exterminate.scar.SeekSymbols.SERVICE;
 
 import jakarta.enterprise.context.Dependent;
+import scar.seek.ContinuationsSeeker;
 import scar.seek.Seek;
-import scar.seek.SeekContext;
-import scar.seek.ContextSeeker;
 import software.amazon.awssdk.services.ec2.Ec2Client;
 import software.amazon.awssdk.services.ec2.model.DescribeRegionsRequest;
 
 @Dependent
-@Seek(name = "provider", value = "aws")
-@Seek(name = "service", value = "ec2")
-@Seek(name = "resourceType", value = "region")
-public class RegionSeek extends ContextSeeker {
-
-
+@Seek(name = PROVIDER, value = AWS)
+@Seek(name = SERVICE, value = EC2)
+@Seek(name = RESOURCE_TYPE, value = REGION)
+public class RegionSeek extends ContinuationsSeeker {
     @Override
-    public List<SeekContext> seek(SeekContext context) {
-        List<SeekContext> result = new ArrayList<>();
+    public void onSeek() {
         try (var ec2Client = Ec2Client.create()) {
             var request = DescribeRegionsRequest.builder().build();
-
             var response = ec2Client.describeRegions(request);
-
             for (var region : response.regions()) {
-                var regionContext = context.with(
+                var regionContext = getContext().with(
                         "region", region.regionName());
-                result.addAll(regionContext);
+                add(regionContext);
             }
         }
-        return result;
     }
 
 }

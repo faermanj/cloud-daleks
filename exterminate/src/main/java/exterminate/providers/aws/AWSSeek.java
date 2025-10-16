@@ -1,21 +1,17 @@
 package exterminate.providers.aws;
 
-import scar.seek.SeekContext;
-import scar.seek.Seek;
-
-import java.util.List;
+import static exterminate.scar.SeekSymbols.*;
 
 import jakarta.enterprise.context.Dependent;
-import scar.seek.ContextSeeker;
+import scar.seek.ContinuationsSeeker;
+import scar.seek.Seek;
 
 @Dependent
-@Seek(name = "provider", value = "aws")
-public class AWSSeek extends ContextSeeker {
-
+@Seek(name = PROVIDER, value = AWS)
+public class AWSSeek extends ContinuationsSeeker {
     @Override
-    public List<SeekContext> seek(SeekContext context) {
-        return context.with(
-                "service", "ec2",
-                "resourceType", "region");
+    protected void onSeek() {
+        add("service", "ec2",
+            "resourceType", "region");
     }
 }
