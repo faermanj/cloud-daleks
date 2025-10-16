@@ -7,8 +7,8 @@ import io.quarkus.logging.Log;
 import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
-import seek.Seeker;
-import seek.SeekContext;
+import scar.seek.Seeker;
+import scar.seek.SeekContext;
 
 @Dependent
 public class ExterminateTask implements Callable<Void> {

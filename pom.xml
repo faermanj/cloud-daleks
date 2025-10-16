@@ -1,41 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    
+
     <groupId>cloud-daleks</groupId>
     <artifactId>cloud-daleks</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    
+
     <properties>
-        <maven.compiler.release>21</maven.compiler.release>
+        <maven.compiler.release>25</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        
-        <!-- Plugin versions -->
+
+        <!--
+          🔗 https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin
+          Latest stable: 3.14.1
+        -->
         <compiler-plugin.version>3.14.1</compiler-plugin.version>
+
+        <!--
+          🔗 https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin
+          🔗 https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-failsafe-plugin
+          Latest stable: 3.5.4
+        -->
         <surefire-plugin.version>3.5.4</surefire-plugin.version>
 
-        <!-- Quarkus -->
+        <!--
+          🔗 https://mvnrepository.com/artifact/io.quarkus.platform/quarkus-bom
+          Latest Final release: 3.28.3
+        -->
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-        <quarkus.platform.version>3.16.4</quarkus.platform.version>
-        
-        <!-- Dependencies -->
-        <datafaker.version>2.1.0</datafaker.version>
-        <aws-sdk.version>2.28.11</aws-sdk.version>
-        
+        <quarkus.platform.version>3.28.3</quarkus.platform.version>
+
+        <!--
+          🔗 https://mvnrepository.com/artifact/net.datafaker/datafaker
+          Latest stable: 2.5.2
+        -->
+        <datafaker.version>2.5.2</datafaker.version>
+
+        <!--
+          🔗 https://mvnrepository.com/artifact/software.amazon.awssdk/bom
+          Latest stable: 2.35.8
+        -->
+        <aws-sdk.version>2.35.8</aws-sdk.version>
+
         <!-- Test settings -->
         <skipITs>true</skipITs>
         <skipTests>true</skipTests>
     </properties>
-    
+
     <modules>
         <module>exterminate</module>
     </modules>
-    
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -45,7 +65,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            
+
             <!-- AWS SDK BOM -->
             <dependency>
                 <groupId>software.amazon.awssdk</groupId>
@@ -54,7 +74,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            
+
             <!-- Other dependencies -->
             <dependency>
                 <groupId>net.datafaker</groupId>
@@ -63,7 +83,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    
+
     <build>
         <defaultGoal>clean verify</defaultGoal>
         <pluginManagement>
@@ -73,7 +93,7 @@
                     <artifactId>quarkus-maven-plugin</artifactId>
                     <version>${quarkus.platform.version}</version>
                 </plugin>
-                
+
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${compiler-plugin.version}</version>
@@ -81,7 +101,7 @@
                         <parameters>true</parameters>
                     </configuration>
                 </plugin>
-                
+
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${surefire-plugin.version}</version>
@@ -92,7 +112,7 @@
                         </systemPropertyVariables>
                     </configuration>
                 </plugin>
-                
+
                 <plugin>
                     <artifactId>maven-failsafe-plugin</artifactId>
                     <version>${surefire-plugin.version}</version>
@@ -111,12 +131,10 @@
                         </execution>
                     </executions>
                 </plugin>
-                
-
             </plugins>
         </pluginManagement>
     </build>
-    
+
     <profiles>
         <profile>
             <id>native</id>

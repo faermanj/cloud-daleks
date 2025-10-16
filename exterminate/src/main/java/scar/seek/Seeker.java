@@ -1,4 +1,4 @@
-package seek;
+package scar.seek;
 
 import java.util.List;
 

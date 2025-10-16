@@ -58,24 +58,9 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <argLine>${argLine} ${jvm.add-opens} ${jvm.enable-preview} ${jvm.suppress-warnings}</argLine>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <configuration>
-                    <argLine>${argLine} ${jvm.add-opens} ${jvm.enable-preview} ${jvm.suppress-warnings}</argLine>
-                    <systemPropertyVariables>
-                        <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
-                    </systemPropertyVariables>
-                </configuration>
-            </plugin>
+
+
+
         </plugins>
     </build>
 

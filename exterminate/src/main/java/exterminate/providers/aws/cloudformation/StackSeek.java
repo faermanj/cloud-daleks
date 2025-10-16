@@ -1,11 +1,9 @@
 package exterminate.providers.aws.cloudformation;
 
-import exterminate.Execution;
 import io.quarkus.logging.Log;
 import jakarta.enterprise.context.Dependent;
-import jakarta.inject.Inject;
-import seek.Seek;
-import seek.ContextSeeker;
+import scar.seek.Seek;
+import scar.seek.ContextSeeker;
 import software.amazon.awssdk.services.cloudformation.CloudFormationClient;
 import software.amazon.awssdk.services.cloudformation.model.ListStacksRequest;
 

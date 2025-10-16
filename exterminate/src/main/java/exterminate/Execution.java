@@ -6,13 +6,12 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Any;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
-import seek.Seeker;
-import seek.SeekContext;
-import seek.Seek;
+import scar.seek.Seeker;
+import scar.seek.SeekContext;
+import scar.seek.Seek;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 @ApplicationScoped
 public class Execution {

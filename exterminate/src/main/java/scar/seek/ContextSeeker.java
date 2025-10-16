@@ -1,13 +1,8 @@
-package seek;
+package scar.seek;
 
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
-import seek.Seek;
-
-import io.quarkus.logging.Log;
-import jakarta.enterprise.context.Dependent;
 
 public abstract class ContextSeeker implements Seeker {
 

@@ -1,12 +1,12 @@
 package exterminate.providers.aws;
 
-import seek.SeekContext;
-import seek.Seek;
+import scar.seek.SeekContext;
+import scar.seek.Seek;
 
 import java.util.List;
 
 import jakarta.enterprise.context.Dependent;
-import seek.ContextSeeker;
+import scar.seek.ContextSeeker;
 
 @Dependent
 @Seek(name = "provider", value = "aws")
@@ -14,8 +14,8 @@ public class AWSSeek extends ContextSeeker {
 
     @Override
     public List<SeekContext> seek(SeekContext context) {
-        return List.of(context.with(
+        return context.with(
                 "service", "ec2",
-                "resourceType", "region"));
+                "resourceType", "region");
     }
 }

@@ -3,12 +3,10 @@ package exterminate.providers.aws.ec2;
 import java.util.ArrayList;
 import java.util.List;
 
-import exterminate.Execution;
 import jakarta.enterprise.context.Dependent;
-import jakarta.inject.Inject;
-import seek.Seek;
-import seek.SeekContext;
-import seek.ContextSeeker;
+import scar.seek.Seek;
+import scar.seek.SeekContext;
+import scar.seek.ContextSeeker;
 import software.amazon.awssdk.services.ec2.Ec2Client;
 import software.amazon.awssdk.services.ec2.model.DescribeRegionsRequest;
 
@@ -30,7 +28,7 @@ public class RegionSeek extends ContextSeeker {
             for (var region : response.regions()) {
                 var regionContext = context.with(
                         "region", region.regionName());
-                result.add(regionContext);
+                result.addAll(regionContext);
             }
         }
         return result;
