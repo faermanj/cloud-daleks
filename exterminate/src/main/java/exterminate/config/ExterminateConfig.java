@@ -8,4 +8,7 @@ public interface ExterminateConfig {
     @WithDefault("uala")
     String uala();
 
+    @WithDefault("10000")
+    Integer throttle();
+
 }

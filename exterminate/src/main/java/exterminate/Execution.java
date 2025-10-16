@@ -1,7 +1,6 @@
 package exterminate;
 
 import exterminate.config.ExterminateConfig;
-import exterminate.model.CloudResource;
 import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Any;
@@ -13,7 +12,6 @@ import seek.Seek;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @ApplicationScoped
@@ -25,19 +23,6 @@ public class Execution {
     @Any // TODO: Specific inject
     Instance<Seeker> seekerInstance;
 
-    private final List<CloudResource> cloudResources = new CopyOnWriteArrayList<>();
-
-    public void addCloudResource(CloudResource resource) {
-        cloudResources.add(resource);
-    }
-
-    public List<CloudResource> getCloudResources() {
-        return List.copyOf(cloudResources);
-    }
-
-    public void clearCloudResources() {
-        cloudResources.clear();
-    }
 
     public void seek(SeekContext seekContext) {
         Log.infof("Seeking [%s]", seekContext);
@@ -54,7 +39,7 @@ public class Execution {
 
     private void throttle() {
         try {
-            Thread.sleep(60_000);
+            Thread.sleep(config.throttle());
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -83,7 +68,7 @@ public class Execution {
         Log.tracef("  Seeker attributes: %s", seekerAttributes);
 
         // iterate on seekcontext
-        for (var entry : context.entrySet()) {
+        for (var entry : seekContext.getContextMap().entrySet()) {
             var key = entry.getKey();
             var value = entry.getValue();
             var seekerValue = seekerAttributes.get(key);

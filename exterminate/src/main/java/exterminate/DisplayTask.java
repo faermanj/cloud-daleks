@@ -29,36 +29,8 @@ public class DisplayTask implements Callable<Void> {
     }
 
     private void render() {
-        displayCloudResources();
-    }
-
-    private void displayCloudResources() {
-        var resources = execution.getCloudResources();
-
-        System.out.println("Cloud Resources Found:");
-        System.out.println("======================");
-
-        if (resources.isEmpty()) {
-            System.out.println("No resources found yet...");
-        } else {
-            // Print table header
-            System.out.printf("%-20s %-10s %-15s %-15s %-30s%n",
-                    "PARENT", "PROVIDER", "SERVICE", "TYPE", "RESOURCE_ID");
-            System.out.println("-".repeat(95));
-
-            // Print table rows
-            for (var resource : resources) {
-                var parentName = resource.getParent() != null ? resource.getParent().getName() : "-";
-                System.out.printf("%-20s %-10s %-15s %-15s %-30s%n",
-                        parentName,
-                        resource.getProvider(),
-                        resource.getServiceName(),
-                        resource.getResourceType(),
-                        resource.getResourceId());
-            }
-        }
-
-        System.out.printf("%nTotal resources: %d%n", resources.size());
+        return;
+        // clearScreen();
     }
 
     private void clearScreen() {

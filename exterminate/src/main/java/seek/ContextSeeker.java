@@ -1,21 +1,16 @@
 package seek;
 
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
 import seek.Seek;
 
 import io.quarkus.logging.Log;
 import jakarta.enterprise.context.Dependent;
 
 public abstract class ContextSeeker implements Seeker {
-    SeekContext context;
 
-    public SeekContext getContext() {
-        return context;
-    }
-
-    public void setContext(SeekContext context) {
-        this.context = context;
-    }
 
     public List<SeekContext> seek(SeekContext context) {
         return List.of(context);
@@ -32,7 +27,7 @@ public abstract class ContextSeeker implements Seeker {
         sb.append("{");
         sb.append("\"className\": \"").append(clazz.getSimpleName()).append("\"");
         Seek[] seeks = clazz.getAnnotationsByType(Seek.class);
-        java.util.Map<String, String> seekMap = new java.util.TreeMap<>();
+        Map<String, String> seekMap = new TreeMap<>();
         for (Seek seek : seeks) {
             seekMap.put(seek.name(), seek.value());
         }

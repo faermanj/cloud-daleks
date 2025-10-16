@@ -28,7 +28,7 @@ public class RegionSeek extends ContextSeeker {
             var response = ec2Client.describeRegions(request);
 
             for (var region : response.regions()) {
-                var regionContext = getContext().with(
+                var regionContext = context.with(
                         "region", region.regionName());
                 result.add(regionContext);
             }
