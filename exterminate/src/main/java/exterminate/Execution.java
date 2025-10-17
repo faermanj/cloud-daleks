@@ -12,6 +12,7 @@ import scar.seek.Seek;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ApplicationScoped
 public class Execution {
@@ -19,12 +20,51 @@ public class Execution {
     ExterminateConfig config;
 
     @Inject
-    @Any // TODO: Specific inject
+    @Any
     Instance<Seeker> seekerInstance;
 
 
+    public boolean isExcluded(SeekContext seekContext){
+        // Check against configuration
+        var excludeMap = config.seekExclude();
+        for (var entry : excludeMap.entrySet()) {
+            var contextMap = entry.getValue();
+            if (contextMap.equals(seekContext.getContextMap())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isIncluded(SeekContext seekContext){
+        // Check against configuration
+        var includesMap = config.seekInclude();
+        for (var entry : includesMap.entrySet()) {
+            var configMap = entry.getValue();
+            var isIncluded = matches(configMap, seekContext.getContextMap());
+            if(isIncluded){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean matches(Map<String, String> configMap, Map<String, String> seekMap) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'matches'");
+    }
+
     public void seek(SeekContext seekContext) {
         Log.infof("Seeking [%s]", seekContext);
+        if (isExcluded(seekContext)){
+            Log.infof("  Seek context excluded [%s]", seekContext);
+            if (! isIncluded(seekContext)){
+                Log.infof("  Seek context not included, ignoring. [%s]", seekContext);
+                return;
+            }else{
+                Log.infof("  Seek context re-included. [%s]", seekContext);
+            }
+        }
         List<Seeker> seekers = seekerInstance.stream().toList();
         int total = seekers.size();
         seekers = seekers.stream()
@@ -33,19 +73,19 @@ public class Execution {
         int matched = seekers.size();
         Log.infof("SeekContext [%s] matched [%s/%s] seekers: %s", seekContext, matched, total, seekers);
         throttle();
-        seekers.forEach((s) -> run(s, seekContext));
+        seekers.forEach((s) -> seek(s, seekContext));
     }
 
     public void throttle() {
         try {
             Thread.sleep(config.throttle());
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            Log.error("Throttle interrupted", e);
+            Thread.currentThread().interrupt();
         }
     }
 
-    private void run(Seeker seeker, SeekContext seekContext) {
+    private void seek(Seeker seeker, SeekContext seekContext) {
         Log.infof("Running seeker [%s] with context [%s]", seeker.getClass().getSimpleName(), seekContext);
         var found = seeker.seek(seekContext);
         Log.infof("   Seeker [%s] found [%s] continuations: %s", seeker.getClass().getSimpleName(), found.size(), found);
