@@ -9,6 +9,7 @@ import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 import scar.seek.Seeker;
+import scar.seek.SeekConfig;
 import scar.seek.SeekContext;
 
 @Dependent
@@ -19,6 +20,8 @@ public class ExterminateTask implements Callable<Void> {
     @Inject
     ExterminateConfig config;
 
+    @Inject
+    SeekConfig  seekConfig;
     @Inject
     Instance<Seeker> seekers;
 
@@ -34,8 +37,8 @@ public class ExterminateTask implements Callable<Void> {
         // print each configuration property
         Log.info("Configuration:");
         Log.info(" - Throttle: " + config.throttle() + " ms");
-        Log.info(" - Seek Exclude: " + config.seekExclude());
-        Log.info(" - Seek Include: " + config.seekInclude());
+        Log.info(" - Seek Exclude: " + seekConfig.exclude());
+        Log.info(" - Seek Include: " + seekConfig.include());
         Log.info("Registered seekers: ");
         for (Seeker seeker : seekers) {
             Log.info(" - " + seeker.getClass().getName());

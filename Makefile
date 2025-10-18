@@ -1,7 +1,13 @@
 .PHONY: make
 
 make:
-	scripts/make.sh
+	scripts/make-images.sh
+
+build:
+	./mvnw
+
+native:
+	scripts/make-native.sh
 
 corretto:
 	scripts/make-jre.sh

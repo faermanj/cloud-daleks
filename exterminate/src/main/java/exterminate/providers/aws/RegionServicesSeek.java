@@ -1,6 +1,7 @@
 package exterminate.providers.aws;
 
 import jakarta.enterprise.context.Dependent;
+import scar.seek.ContinuationsSeeker;
 import scar.seek.Seek;
 
 import static exterminate.scar.SeekSymbols.*;
@@ -14,5 +15,10 @@ import static scar.seek.Seeker.*;
 @Seek(name = SERVICE, value = EC2)
 @Seek(name = RESOURCE_TYPE, value = REGION)
 @Seek(name = REGION, value = ANY)
-public class RegionServicesSeek {
+public class RegionServicesSeek  extends ContinuationsSeeker {
+    @Override
+    protected void onSeek() {
+        add("service", "cloudformation",
+            "resourceType", "stack");
+    }
 }

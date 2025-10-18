@@ -9,11 +9,10 @@ import java.util.Map;
 
 @ConfigMapping(prefix = "exterminate")
 public interface ExterminateConfig {
-    @WithDefault("5000")
+    @WithDefault("2")
     Integer throttle();
 
         
-    Map<String, Map<String, String>> seekExclude();
-    Map<String, Map<String, String>> seekInclude();
+
 
 }

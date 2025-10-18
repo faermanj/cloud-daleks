@@ -9,6 +9,7 @@ import jakarta.inject.Inject;
 import scar.seek.Seeker;
 import scar.seek.SeekContext;
 import scar.seek.Seek;
+import scar.seek.SeekConfig;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,13 +21,16 @@ public class Execution {
     ExterminateConfig config;
 
     @Inject
+    SeekConfig seekConfig;
+
+    @Inject
     @Any
     Instance<Seeker> seekerInstance;
 
 
     public boolean isExcluded(SeekContext seekContext){
         // Check against configuration
-        var excludeMap = config.seekExclude();
+        var excludeMap = seekConfig.exclude();
         for (var entry : excludeMap.entrySet()) {
             var contextMap = entry.getValue();
             if (contextMap.equals(seekContext.getContextMap())) {
@@ -38,10 +42,10 @@ public class Execution {
 
     public boolean isIncluded(SeekContext seekContext){
         // Check against configuration
-        var includesMap = config.seekInclude();
+        var includesMap = seekConfig.include();
         for (var entry : includesMap.entrySet()) {
             var configMap = entry.getValue();
-            var isIncluded = matches(configMap, seekContext.getContextMap());
+            var isIncluded = equals(configMap, seekContext.getContextMap());
             if(isIncluded){
                 return true;
             }
@@ -49,7 +53,7 @@ public class Execution {
         return false;
     }
 
-    private boolean matches(Map<String, String> configMap, Map<String, String> seekMap) {
+    private boolean equals(Map<String, String> configMap, Map<String, String> seekMap) {
         return configMap.equals(seekMap);
     }
 
@@ -77,13 +81,14 @@ public class Execution {
 
     public void throttle() {
         try {
-            Thread.sleep(config.throttle());
+            Thread.sleep(1_000 * config.throttle());
         } catch (InterruptedException e) {
             Log.error("Throttle interrupted", e);
             Thread.currentThread().interrupt();
         }
     }
 
+    // 
     private void seek(Seeker seeker, SeekContext seekContext) {
         Log.infof("Running seeker [%s] with context [%s]", seeker.getClass().getSimpleName(), seekContext);
         var found = seeker.seek(seekContext);
@@ -111,7 +116,9 @@ public class Execution {
             var key = entry.getKey();
             var value = entry.getValue();
             var seekerValue = seekerAttributes.get(key);
-            var match = (seekerValue != null && seekerValue.equalsIgnoreCase(value));
+            var match = (seekerValue != null 
+                && (seekerValue.equals("*") ||
+                    seekerValue.equalsIgnoreCase(value)));
             if (match){
                 seekerAttributes.remove(key);
                 context.remove(key);
