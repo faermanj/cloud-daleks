@@ -50,8 +50,7 @@ public class Execution {
     }
 
     private boolean matches(Map<String, String> configMap, Map<String, String> seekMap) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'matches'");
+        return configMap.equals(seekMap);
     }
 
     public void seek(SeekContext seekContext) {

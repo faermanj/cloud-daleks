@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cloud-daleks</groupId>
@@ -10,41 +10,41 @@
     <packaging>pom</packaging>
 
     <properties>
-        <maven.compiler.release>25</maven.compiler.release>
+        <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!--
-          🔗 https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin
-          Latest stable: 3.14.1
-        -->
+                    Link: https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin
+                    Latest stable: 3.14.1
+                -->
         <compiler-plugin.version>3.14.1</compiler-plugin.version>
 
         <!--
-          🔗 https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin
-          🔗 https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-failsafe-plugin
+              Link: https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin
+              Link: https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-failsafe-plugin
           Latest stable: 3.5.4
         -->
         <surefire-plugin.version>3.5.4</surefire-plugin.version>
 
         <!--
-          🔗 https://mvnrepository.com/artifact/io.quarkus.platform/quarkus-bom
-          Latest Final release: 3.28.3
-        -->
+                    Link: https://mvnrepository.com/artifact/io.quarkus.platform/quarkus-bom
+                    Latest Final release: 3.28.3
+                -->
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-        <quarkus.platform.version>3.28.3</quarkus.platform.version>
+        <quarkus.platform.version>3.28.4</quarkus.platform.version>
 
         <!--
-          🔗 https://mvnrepository.com/artifact/net.datafaker/datafaker
-          Latest stable: 2.5.2
-        -->
+                    Link: https://mvnrepository.com/artifact/net.datafaker/datafaker
+                    Latest stable: 2.5.2
+                -->
         <datafaker.version>2.5.2</datafaker.version>
 
         <!--
-          🔗 https://mvnrepository.com/artifact/software.amazon.awssdk/bom
-          Latest stable: 2.35.8
-        -->
+                    Link: https://mvnrepository.com/artifact/software.amazon.awssdk/bom
+                    Latest stable: 2.35.8
+                -->
         <aws-sdk.version>2.35.8</aws-sdk.version>
 
         <!-- Test settings -->
@@ -135,19 +135,5 @@
         </pluginManagement>
     </build>
 
-    <profiles>
-        <profile>
-            <id>native</id>
-            <activation>
-                <property>
-                    <name>native</name>
-                </property>
-            </activation>
-            <properties>
-                <quarkus.package.jar.enabled>false</quarkus.package.jar.enabled>
-                <skipITs>false</skipITs>
-                <quarkus.native.enabled>true</quarkus.native.enabled>
-            </properties>
-        </profile>
-    </profiles>
+
 </project>
