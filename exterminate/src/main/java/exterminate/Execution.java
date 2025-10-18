@@ -11,9 +11,9 @@ import scar.seek.SeekContext;
 import scar.seek.Seek;
 import scar.seek.SeekConfig;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 @ApplicationScoped
 public class Execution {
@@ -58,14 +58,14 @@ public class Execution {
     }
 
     public void seek(SeekContext seekContext) {
-        Log.infof("Seeking [%s]", seekContext);
+        Log.tracef("Seeking [%s]", seekContext);
         if (isExcluded(seekContext)){
-            Log.infof("  Seek context excluded [%s]", seekContext);
+            Log.tracef("  Seek context excluded [%s]", seekContext);
             if (! isIncluded(seekContext)){
-                Log.infof("  Seek context not included, ignoring. [%s]", seekContext);
+                Log.tracef("  Seek context not included, ignoring. [%s]", seekContext);
                 return;
             }else{
-                Log.infof("  Seek context re-included. [%s]", seekContext);
+                Log.tracef("  Seek context re-included. [%s]", seekContext);
             }
         }
         List<Seeker> seekers = seekerInstance.stream().toList();
@@ -74,7 +74,7 @@ public class Execution {
                 .filter((s) -> matchesSeeker(s, seekContext))
                 .toList();
         int matched = seekers.size();
-        Log.infof("SeekContext [%s] matched [%s/%s] seekers: %s", seekContext, matched, total, seekers);
+        Log.infof("Seek context[%s] matched[%s/%s] seekers: %s", seekContext, matched, total, seekers);
         throttle();
         seekers.forEach((s) -> seek(s, seekContext));
     }
@@ -97,14 +97,14 @@ public class Execution {
     }
 
     private boolean matchesSeeker(Seeker seeker, SeekContext seekContext) {
-        var context = new HashMap<>(seekContext.getContextMap());
+        var context = new TreeMap<>(seekContext.getContextMap());
         Log.tracef("Matching seek [%s] context [%s]", seeker.getClass().getSimpleName(), context);
 
         // Fetch all SeekTarget annotations from the seeker class
         var seekTargets = seeker.getClass().getAnnotationsByType(Seek.class);
 
         // Convert SeekTarget annotations to a map for easier lookup
-        var seekerAttributes = new HashMap<String, String>();
+        var seekerAttributes = new TreeMap<String, String>();
         for (var target : seekTargets) {
             seekerAttributes.put(target.name(), target.value());
         }

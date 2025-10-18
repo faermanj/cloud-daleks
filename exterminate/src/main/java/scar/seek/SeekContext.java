@@ -2,9 +2,9 @@ package scar.seek;
 
 import scar.Context;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class SeekContext extends Context {
 
@@ -18,7 +18,7 @@ public class SeekContext extends Context {
 
 
     public List<SeekContext> with(Map<String, String> contextMap) {
-        var union = new HashMap<String, String>();
+        var union = new TreeMap<String, String>();
         union.putAll(getContextMap());
         union.putAll(contextMap);
         return List.of(new SeekContext(union));

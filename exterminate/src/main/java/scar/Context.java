@@ -1,12 +1,19 @@
 package scar;
 
+import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.TreeMap;
+
+import scar.report.ReportUtils;
 
 public class Context {
     Map<String, String> contextMap;
 
     protected Context(Map<String, String> contextMap){
-        this.contextMap = contextMap;
+        this.contextMap =  new TreeMap<>(contextMap);
+        var now = LocalDateTime.now();
+        var creationTime = ReportUtils.format(now);
+        this.contextMap.put("creationTime", creationTime);
     }
 
     public Map<String,String> getContextMap() {
