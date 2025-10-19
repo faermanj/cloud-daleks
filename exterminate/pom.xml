@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    
+
     <parent>
         <groupId>cloud-daleks</groupId>
         <artifactId>cloud-daleks</artifactId>
@@ -12,9 +14,9 @@
     <properties>
         <quarkus.package.jar.type>uber-jar</quarkus.package.jar.type>
     </properties>
-    
+
     <artifactId>exterminate</artifactId>
-    
+
     <dependencies>
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -24,6 +26,14 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-arc</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-agroal</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jdbc-h2</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -31,11 +41,11 @@
             <scope>test</scope>
         </dependency>
 
-            <dependency>
-        <groupId>com.googlecode.lanterna</groupId>
-        <artifactId>lanterna</artifactId>
-        <version>${lanterna.version}</version>
-    </dependency>
+        <dependency>
+            <groupId>com.googlecode.lanterna</groupId>
+            <artifactId>lanterna</artifactId>
+            <version>${lanterna.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
@@ -48,12 +58,12 @@
             <version>${aws-sdk.version}</version>
         </dependency>
 
-        
+
     </dependencies>
 
     <build>
         <finalName>${project.artifactId}</finalName>
-       <plugins>
+        <plugins>
             <plugin>
                 <groupId>${quarkus.platform.group-id}</groupId>
                 <artifactId>quarkus-maven-plugin</artifactId>
@@ -100,14 +110,15 @@
                 </executions>
                 <configuration>
                     <systemPropertyVariables>
-                        <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
+                        <native.image.path>
+                            ${project.build.directory}/${project.build.finalName}-runner</native.image.path>
                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                         <maven.home>${maven.home}</maven.home>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
         </plugins>
- 
+
     </build>
 
     <profiles>
@@ -121,9 +132,11 @@
             <properties>
                 <quarkus.native.enabled>true</quarkus.native.enabled>
                 <!--
-                <quarkus.native.additional-build-args>- - static,- - libc=musl,- - initialize-at-run-time=org.apache.http.conn.ssl.SSLConnectionSocketFactory\,org.apache.http.impl.client.TargetAuthenticationStrategy,org.apache.http.impl.client.ProxyAuthenticationStrategy</quarkus.native.additional-build-args>
+                <quarkus.native.additional-build-args>- - static,- - libc=musl,- -
+                initialize-at-run-time=org.apache.http.conn.ssl.SSLConnectionSocketFactory\,org.apache.http.impl.client.TargetAuthenticationStrategy,org.apache.http.impl.client.ProxyAuthenticationStrategy</quarkus.native.additional-build-args>
                  -->
-                <quarkus.native.additional-build-args>--initialize-at-run-time=org.apache.http.impl.client.DefaultRedirectStrategy\,org.apache.http.conn.ssl.StrictHostnameVerifier\,org.apache.http.conn.ssl.BrowserCompatHostnameVerifier\,org.apache.http.conn.ssl.AllowAllHostnameVerifier\,org.apache.http.conn.ssl.SSLConnectionSocketFactory\,org.apache.http.impl.client.TargetAuthenticationStrategy\,org.apache.http.impl.client.ProxyAuthenticationStrategy</quarkus.native.additional-build-args>
+                <quarkus.native.additional-build-args>
+                    --initialize-at-run-time=org.apache.http.impl.client.DefaultRedirectStrategy\,org.apache.http.conn.ssl.StrictHostnameVerifier\,org.apache.http.conn.ssl.BrowserCompatHostnameVerifier\,org.apache.http.conn.ssl.AllowAllHostnameVerifier\,org.apache.http.conn.ssl.SSLConnectionSocketFactory\,org.apache.http.impl.client.TargetAuthenticationStrategy\,org.apache.http.impl.client.ProxyAuthenticationStrategy</quarkus.native.additional-build-args>
             </properties>
         </profile>
     </profiles>
