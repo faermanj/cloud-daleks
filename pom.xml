@@ -46,7 +46,7 @@
                     Latest stable: 2.35.8
                 -->
         <aws-sdk.version>2.35.8</aws-sdk.version>
-
+        <lanterna.version>3.1.2</lanterna.version>
         <!-- Test settings -->
         <skipITs>true</skipITs>
         <skipTests>true</skipTests>

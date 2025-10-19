@@ -7,6 +7,8 @@ import jakarta.enterprise.inject.Any;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -19,6 +21,10 @@ import java.util.TreeMap;
  */
 @ApplicationScoped
 public class Seekers {
+    LocalDateTime creationTime = LocalDateTime.now();
+    List<SeekContext> seekHistory = new ArrayList<>();
+    
+
     /** Configuration for seek inclusion/exclusion. */
     @Inject
     private SeekConfig seekConfig;
@@ -190,6 +196,10 @@ public class Seekers {
             Log.error("Throttle interrupted", e);
             Thread.currentThread().interrupt();
         }
+    }
+
+    public LocalDateTime getCreationTime() {
+        return creationTime;
     }
 
 }

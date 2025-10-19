@@ -1,6 +1,7 @@
 package exterminate.tasks;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import exterminate.config.ExterminateConfig;
 import exterminate.providers.aws.AWSSeek;
@@ -19,11 +20,18 @@ public class ExterminateTask implements Callable<Void> {
 
     @Inject
     Seekers seekers;
+    private AtomicBoolean running;
+
+    public void setRunningFlag(AtomicBoolean running) {
+        this.running = running;
+    }
 
     @Override
     public Void call() throws Exception {
         present();
         exterminate();
+        // Signal display to stop when done
+        if (running != null) running.set(false);
         return null;
     }
 
@@ -42,23 +50,15 @@ public class ExterminateTask implements Callable<Void> {
 
     private void exterminate() {
         seek();
-        destroy();
-        Log.info("Exterminate!");
+        //TODO: Classify
+        //TODO: Act
+        //TODO: Report
     }
 
-    private void destroy() {
-        Log.warn("EXTERMINATE!");
-    }
+
 
     private void seek() {
-        Log.info("Starting resource discovery...");
-
-        // Seek for AWS regions specifically
         seekers.seek(AWSSeek.CONTEXT);
-
-
-
-        Log.info("Resource discovery completed");
     }
 
 

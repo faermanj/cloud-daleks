@@ -12,7 +12,9 @@ import scar.seek.Seekers;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import exterminate.tasks.DisplayTask;
 import exterminate.tasks.ExterminateTask;
 
 @QuarkusMain
@@ -39,20 +41,17 @@ public class ExterminateMain implements QuarkusApplication, Runnable {
     }
 
     private void exterminate() {
+        AtomicBoolean running = new AtomicBoolean(true);
+        displayTask.setRunningFlag(running);
+        exterminateTask.setRunningFlag(running);
         try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
-            // Create and start the timer task
+            var displayFuture = executor.submit(displayTask);
             var timerFuture = executor.submit(exterminateTask);
-
-            // Create and start the display task
-            // var displayFuture = executor.submit(displayTask);
-
-            // Wait for both tasks to complete
             timerFuture.get();
-            // displayFuture.get();
-            
+            running.set(false); // signal display to stop
+            displayFuture.get();
             Log.info("All tasks completed successfully!");
             Log.info("Final execution state: " + sekers);
-            
         } catch (InterruptedException e) {
             Log.error("Tasks were interrupted", e);
             Thread.currentThread().interrupt();
