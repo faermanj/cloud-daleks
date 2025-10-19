@@ -8,8 +8,10 @@ import static exterminate.scar.SeekSymbols.RESOURCE_TYPE;
 import static exterminate.scar.SeekSymbols.SERVICE;
 
 import jakarta.enterprise.context.Dependent;
+import jakarta.enterprise.event.Observes;
 import scar.seek.ContinuationsSeeker;
 import scar.seek.Seek;
+import scar.seek.SeekEvent;
 import software.amazon.awssdk.services.ec2.Ec2Client;
 import software.amazon.awssdk.services.ec2.model.DescribeRegionsRequest;
 
@@ -18,15 +20,12 @@ import software.amazon.awssdk.services.ec2.model.DescribeRegionsRequest;
 @Seek(name = SERVICE, value = EC2)
 @Seek(name = RESOURCE_TYPE, value = REGION)
 public class RegionSeek extends ContinuationsSeeker {
-    @Override
-    public void onSeek() {
+    public void onSeek(final @Observes SeekEvent event) {
         try (var ec2Client = Ec2Client.create()) {
             var request = DescribeRegionsRequest.builder().build();
             var response = ec2Client.describeRegions(request);
             for (var region : response.regions()) {
-                var regionContext = getContext().with(
-                        "region", region.regionName());
-                add(regionContext);
+                continueWith(event, "region", region.regionName());
             }
         }
     }

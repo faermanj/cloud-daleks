@@ -13,7 +13,7 @@ public class Context {
         this.contextMap =  new TreeMap<>(contextMap);
         var now = LocalDateTime.now();
         var creationTime = ReportUtils.format(now);
-        this.contextMap.put("creationTime", creationTime);
+        this.contextMap.put("__creationTime", creationTime);
     }
 
     public Map<String,String> getContextMap() {

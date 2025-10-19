@@ -1,0 +1,20 @@
+# Java Single-File Code Review Prompt
+
+Please review the **following single Java file**.  
+Focus **only on improvements inside this file** — do **not** modify or suggest changes in other files or packages.  
+
+Review for:
+- ✅ **Correctness, readability, and maintainability**  
+- ✅ **Use of modern Java features** (`var`, records, switch expressions, streams, etc.) where appropriate  
+- ✅ **Organized and minimal imports** (remove unused, group logically, follow standard ordering)  
+- ✅ **Logical ordering of members** (fields → constructors → public → protected → private → inner types)  
+- ✅ **Consistent naming, modifiers (`final`, `private`), and formatting**  
+- ✅ **Comprehensive and meaningful Javadoc** for classes, public methods, and important fields:
+  - Add or improve missing Javadoc.
+  - Keep explanations concise, describing purpose, parameters, and return values.  
+  - Use the standard Javadoc tags (`@param`, `@return`, `@throws`) where appropriate.  
+
+Please:
+1. Suggest or apply **only in-file** improvements.  
+2. Preserve the class’s **current behavior and design intent**.  
+3. **Explain changes inline in comments** (briefly state why each improvement helps).

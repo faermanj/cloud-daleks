@@ -2,7 +2,7 @@ package exterminate.tasks;
 
 import java.util.concurrent.Callable;
 
-import exterminate.Execution;
+import exterminate.Extermination;
 import exterminate.config.ExterminateConfig;
 import io.quarkus.logging.Log;
 import jakarta.enterprise.context.Dependent;
@@ -15,7 +15,7 @@ import scar.seek.SeekContext;
 @Dependent
 public class ExterminateTask implements Callable<Void> {
     @Inject
-    Execution execution;
+    Extermination execution;
 
     @Inject
     ExterminateConfig config;

@@ -1,0 +1,10 @@
+Please review and complete the sections in the following code where // TODO comments appear.
+For each TODO:
+
+Suggest or implement the missing logic.
+
+Keep the existing style and conventions.
+
+Explain briefly (in comments) why your change fits.
+
+Do not modify unrelated parts of the code.

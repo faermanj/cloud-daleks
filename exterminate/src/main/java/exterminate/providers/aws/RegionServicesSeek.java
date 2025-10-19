@@ -1,13 +1,13 @@
 package exterminate.providers.aws;
 
 import jakarta.enterprise.context.Dependent;
+import jakarta.enterprise.event.Observes;
 import scar.seek.ContinuationsSeeker;
 import scar.seek.Seek;
+import static scar.seek.Seek.ANY;
+import scar.seek.SeekEvent;
 
 import static exterminate.scar.SeekSymbols.*;
-import static exterminate.scar.SeekSymbols.EC2;
-import static exterminate.scar.SeekSymbols.REGION;
-import static exterminate.scar.SeekSymbols.RESOURCE_TYPE;
 import static scar.seek.Seeker.*;
 
 @Dependent
@@ -17,8 +17,8 @@ import static scar.seek.Seeker.*;
 @Seek(name = REGION, value = ANY)
 public class RegionServicesSeek  extends ContinuationsSeeker {
     @Override
-    protected void onSeek() {
-        add("service", "cloudformation",
+    protected void onSeek(@Observes SeekEvent event) {
+        continueWith(event,"service", "cloudformation",
             "resourceType", "stack");
     }
 }

@@ -4,7 +4,9 @@ import static exterminate.scar.SeekSymbols.*;
 
 import io.quarkus.logging.Log;
 import jakarta.enterprise.context.Dependent;
+import jakarta.enterprise.event.Observes;
 import scar.seek.Seek;
+import scar.seek.SeekEvent;
 import scar.seek.ContinuationsSeeker;
 import software.amazon.awssdk.services.cloudformation.CloudFormationClient;
 import software.amazon.awssdk.services.cloudformation.model.ListStacksRequest;
@@ -15,14 +17,16 @@ import software.amazon.awssdk.services.cloudformation.model.ListStacksRequest;
 @Seek(name = RESOURCE_TYPE, value = STACK)
 public class StackSeek extends ContinuationsSeeker {
 
-    public void listAllStacks() {
+    @Override
+    protected void onSeek(@Observes SeekEvent event) {
         try (var cfClient = CloudFormationClient.create()) {
             var request = ListStacksRequest.builder().build();
 
             var response = cfClient.listStacks(request);
 
             for (var stack : response.stackSummaries()) {
-                Log.infof("TODO: add stack to index");
+                var stackId = stack.stackId();
+                continueWith(event, "stackId", stackId);
             }
         } catch (Exception e) {
             System.err.println("Error listing stacks: " + e.getMessage());

@@ -10,6 +10,8 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 @Repeatable(Seeks.class)
 public @interface Seek {
+    static final String ANY = "*";
+
     String name();
     String value();
 }

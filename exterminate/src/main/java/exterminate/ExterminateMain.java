@@ -22,7 +22,7 @@ public class ExterminateMain implements QuarkusApplication, Runnable {
     CommandLine.IFactory factory; 
 
     @Inject
-    Execution execution;
+    Extermination execution;
 
     @Inject
     ExterminateTask exterminateTask;

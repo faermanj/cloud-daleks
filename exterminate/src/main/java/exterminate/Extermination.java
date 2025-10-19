@@ -1,35 +1,55 @@
+
 package exterminate;
 
 import exterminate.config.ExterminateConfig;
 import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Event;
 import jakarta.enterprise.inject.Any;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
-import scar.seek.Seeker;
-import scar.seek.SeekContext;
 import scar.seek.Seek;
 import scar.seek.SeekConfig;
-
+import scar.seek.SeekContext;
+import scar.seek.SeekEvent;
+import scar.seek.Seeker;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+
+/**
+ * Main service for running seek operations and managing seeker beans.
+ * <p>
+ * This class coordinates the seeking process, event firing, and context matching.
+ */
 @ApplicationScoped
-public class Execution {
+public class Extermination {
+    /** Configuration for throttling and other settings. */
     @Inject
-    ExterminateConfig config;
+    private ExterminateConfig config;
 
+    /** Configuration for seek inclusion/exclusion. */
     @Inject
-    SeekConfig seekConfig;
+    private SeekConfig seekConfig;
 
+    /** All available seeker beans. */
     @Inject
     @Any
-    Instance<Seeker> seekerInstance;
+    private Instance<Seeker> seekerInstance;
+
+    /** CDI event for SeekEvent. */
+    @Inject
+    private Event<SeekEvent> seekEvent;
 
 
-    public boolean isExcluded(SeekContext seekContext){
-        // Check against configuration
+
+    /**
+     * Checks if the given seek context is excluded by configuration.
+     * @param seekContext the context to check
+     * @return true if excluded, false otherwise
+     */
+    public boolean isExcluded(final SeekContext seekContext) {
         var excludeMap = seekConfig.exclude();
         for (var entry : excludeMap.entrySet()) {
             var contextMap = entry.getValue();
@@ -40,45 +60,62 @@ public class Execution {
         return false;
     }
 
-    public boolean isIncluded(SeekContext seekContext){
-        // Check against configuration
+
+    /**
+     * Checks if the given seek context is explicitly included by configuration.
+     * @param seekContext the context to check
+     * @return true if included, false otherwise
+     */
+    public boolean isIncluded(final SeekContext seekContext) {
         var includesMap = seekConfig.include();
         for (var entry : includesMap.entrySet()) {
             var configMap = entry.getValue();
-            var isIncluded = equals(configMap, seekContext.getContextMap());
-            if(isIncluded){
+            if (equals(configMap, seekContext.getContextMap())) {
                 return true;
             }
         }
         return false;
     }
 
-    private boolean equals(Map<String, String> configMap, Map<String, String> seekMap) {
+
+    /**
+     * Utility method to compare two context maps for equality.
+     */
+    private boolean equals(final Map<String, String> configMap, final Map<String, String> seekMap) {
         return configMap.equals(seekMap);
     }
 
-    public void seek(SeekContext seekContext) {
+
+    /**
+     * Runs the seek process for the given context, firing events and delegating to matching seekers.
+     * @param seekContext the context to seek
+     */
+    public void seek(final SeekContext seekContext) {
         Log.tracef("Seeking [%s]", seekContext);
-        if (isExcluded(seekContext)){
+        if (isExcluded(seekContext)) {
             Log.tracef("  Seek context excluded [%s]", seekContext);
-            if (! isIncluded(seekContext)){
+            if (!isIncluded(seekContext)) {
                 Log.tracef("  Seek context not included, ignoring. [%s]", seekContext);
                 return;
-            }else{
+            } else {
                 Log.tracef("  Seek context re-included. [%s]", seekContext);
             }
         }
-        List<Seeker> seekers = seekerInstance.stream().toList();
+        var seekers = seekerInstance.stream().toList();
         int total = seekers.size();
         seekers = seekers.stream()
-                .filter((s) -> matchesSeeker(s, seekContext))
+                .filter(s -> matchesSeeker(s, seekContext))
                 .toList();
         int matched = seekers.size();
         Log.infof("Seek context[%s] matched[%s/%s] seekers: %s", seekContext, matched, total, seekers);
         throttle();
-        seekers.forEach((s) -> seek(s, seekContext));
+        seekers.forEach(s -> fire(s, seekContext));
     }
 
+
+    /**
+     * Throttles execution according to configuration.
+     */
     public void throttle() {
         try {
             Thread.sleep(1_000 * config.throttle());
@@ -88,16 +125,37 @@ public class Execution {
         }
     }
 
-    // 
-    private void seek(Seeker seeker, SeekContext seekContext) {
+
+    /**
+     * Runs a seeker for the given context, fires a seek event, and processes all continuations.
+     * @param seeker the seeker to run
+     * @param seekContext the context to seek
+     */
+    private void fire(final Seeker seeker, final SeekContext seekContext) {
         Log.infof("Running seeker [%s] with context [%s]", seeker.getClass().getSimpleName(), seekContext);
-        var found = seeker.seek(seekContext);
-        Log.infof("   Seeker [%s] found [%s] continuations: %s", seeker.getClass().getSimpleName(), found.size(), found);
-        found.forEach(this::seek);
+        // Create SeekEvent and fire it via CDI Event system
+        // This allows other beans to observe seek events and react accordingly.
+        // Collect continuations from all event observers and run seek on them
+        var event = SeekEvent.of(seekContext);
+        seekEvent.fire(event);
+        var continuations = event.getContinuations();
+        Log.infof("Seeker [%s] produced [%s] continuations for context [%s]", seeker.getClass().getSimpleName(), continuations.size(), seekContext);
+        for (var continuation : continuations) {
+            seek(continuation);
+        }
     }
 
-    private boolean matchesSeeker(Seeker seeker, SeekContext seekContext) {
+
+    /**
+     * Checks if the seeker matches the given context based on Seek annotations.
+     * @param seeker the seeker to check
+     * @param seekContext the context to match
+     * @return true if matches, false otherwise
+     */
+    private boolean matchesSeeker(final Seeker seeker, final SeekContext seekContext) {
         var context = new TreeMap<>(seekContext.getContextMap());
+        context.entrySet().removeIf(entry -> entry.getKey().startsWith("__"));
+
         Log.tracef("Matching seek [%s] context [%s]", seeker.getClass().getSimpleName(), context);
 
         // Fetch all SeekTarget annotations from the seeker class
@@ -111,7 +169,7 @@ public class Execution {
 
         Log.tracef("  Seeker attributes: %s", seekerAttributes);
 
-        // iterate on seekcontext
+        // Iterate on seek context and match attributes
         for (var entry : seekContext.getContextMap().entrySet()) {
             var key = entry.getKey();
             var value = entry.getValue();
@@ -119,7 +177,7 @@ public class Execution {
             var match = (seekerValue != null 
                 && (seekerValue.equals("*") ||
                     seekerValue.equalsIgnoreCase(value)));
-            if (match){
+            if (match) {
                 seekerAttributes.remove(key);
                 context.remove(key);
             }

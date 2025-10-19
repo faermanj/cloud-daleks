@@ -9,7 +9,7 @@ import java.util.concurrent.Callable;
 @Dependent
 public class DisplayTask implements Callable<Void> {
     @Inject
-    Execution execution;
+    Extermination execution;
 
     private int intervalSeconds = 5;
 

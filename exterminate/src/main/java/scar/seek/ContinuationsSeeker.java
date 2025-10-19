@@ -5,40 +5,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import io.quarkus.logging.Log;
+import jakarta.enterprise.event.Observes;
+
 public abstract class ContinuationsSeeker implements Seeker {
-    List<SeekContext> continuations = new ArrayList<>();
-    SeekContext context;
+    // Fields
+    protected final List<SeekContext> continuations = new ArrayList<>();
 
-    public List<SeekContext> seek(SeekContext context) {
-        this.context = context;
-        continuations.clear();
-        onSeek();
-        return continuations;
-    }
-
-    protected void onSeek() {
-    }
-
-    protected void addall(List<SeekContext> continuations) {
-        this.continuations.addAll(continuations);
-    }
-
-    protected SeekContext getContext() {
-        return context;
-    }
-
+    // Public methods
     @Override
     public String toString() {
         return toJSON();
-    }
-
-    protected void add(List<SeekContext> continuations) {
-        addall(continuations);
-    }
-
-    protected void add(String k1, String v1, String k2, String v2) {
-        var continuations = context.with(k1, v1, k2, v2);
-        addall(continuations);
     }
 
     public String toJSON() {
@@ -58,4 +35,31 @@ public abstract class ContinuationsSeeker implements Seeker {
         return sb.toString();
     }
 
+    // Protected methods
+    protected void addall(List<SeekContext> continuations) {
+        this.continuations.addAll(continuations);
+    }
+
+    protected void continueWith(List<SeekContext> continuations) {
+        addall(continuations);
+    }
+
+    //TODO: Deduplicate code
+    protected void continueWith(SeekEvent event, String k1, String v1) {
+        var context = event.getSeekContext();
+        var continuations = context.with(k1, v1);
+        addall(continuations);
+    }
+
+    protected void continueWith(SeekEvent event, String k1, String v1, String k2, String v2) {
+        var context = event.getSeekContext();
+        var continuations = context.with(k1, v1, k2, v2);
+        addall(continuations);
+    }
+
+    // Package-private methods
+    protected void onSeek(@Observes SeekEvent event) {
+        Log.warn("Empty onSeek() listener.");
+    }
 }
+
