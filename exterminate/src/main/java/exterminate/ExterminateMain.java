@@ -7,6 +7,7 @@ import io.quarkus.runtime.QuarkusApplication;
 import io.quarkus.runtime.annotations.QuarkusMain;
 import jakarta.inject.Inject;
 import picocli.CommandLine;
+import scar.seek.Seekers;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -22,7 +23,7 @@ public class ExterminateMain implements QuarkusApplication, Runnable {
     CommandLine.IFactory factory; 
 
     @Inject
-    Extermination execution;
+    Seekers sekers;
 
     @Inject
     ExterminateTask exterminateTask;
@@ -34,7 +35,7 @@ public class ExterminateMain implements QuarkusApplication, Runnable {
     public void run() {        
         Log.info("EXTERMINATE! FINAL WARNING: Daleks are *destructive*...");
         exterminate();
-        Log.info("EXTERMINATE! daleks finished! " + execution);
+        Log.info("EXTERMINATE! daleks finished! " + sekers);
     }
 
     private void exterminate() {
@@ -50,7 +51,7 @@ public class ExterminateMain implements QuarkusApplication, Runnable {
             // displayFuture.get();
             
             Log.info("All tasks completed successfully!");
-            Log.info("Final execution state: " + execution);
+            Log.info("Final execution state: " + sekers);
             
         } catch (InterruptedException e) {
             Log.error("Tasks were interrupted", e);

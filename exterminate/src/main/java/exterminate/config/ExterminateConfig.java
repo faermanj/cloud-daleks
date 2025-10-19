@@ -9,10 +9,5 @@ import java.util.Map;
 
 @ConfigMapping(prefix = "exterminate")
 public interface ExterminateConfig {
-    @WithDefault("2")
-    Integer throttle();
-
-        
-
-
+    public String noop();
 }

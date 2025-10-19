@@ -21,7 +21,7 @@ import software.amazon.awssdk.services.ec2.model.DescribeRegionsRequest;
 @Seek(name = RESOURCE_TYPE, value = REGION)
 public class RegionSeek extends ContinuationsSeeker {
     @Override
-    public void onSeek(final @Observes SeekEvent event) {
+    public void onSeek(@Observes SeekEvent event) {
         try (var ec2Client = Ec2Client.create()) {
             var request = DescribeRegionsRequest.builder().build();
             var response = ec2Client.describeRegions(request);

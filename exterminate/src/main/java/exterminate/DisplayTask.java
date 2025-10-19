@@ -3,13 +3,15 @@ package exterminate;
 
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
+import scar.seek.Seekers;
+
 import java.util.List;
 import java.util.concurrent.Callable;
 
 @Dependent
 public class DisplayTask implements Callable<Void> {
     @Inject
-    Extermination execution;
+    Seekers execution;
 
     private int intervalSeconds = 5;
 

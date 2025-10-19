@@ -11,6 +11,7 @@ import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.event.Observes;
 import scar.seek.ContinuationsSeeker;
 import scar.seek.Seek;
+import scar.seek.SeekContext;
 import scar.seek.SeekEvent;
 
 /**
@@ -21,6 +22,8 @@ import scar.seek.SeekEvent;
 @Dependent
 @Seek(name = PROVIDER, value = AWS)
 public class AWSSeek extends ContinuationsSeeker {
+
+    public static final SeekContext CONTEXT = SeekContext.of("provider", "aws");
 
     /**
      * Observes {@link SeekEvent} and adds AWS EC2 region continuations.

@@ -1,18 +1,12 @@
 
-package exterminate;
+package scar.seek;
 
-import exterminate.config.ExterminateConfig;
 import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.event.Event;
 import jakarta.enterprise.inject.Any;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
-import scar.seek.Seek;
-import scar.seek.SeekConfig;
-import scar.seek.SeekContext;
-import scar.seek.SeekEvent;
-import scar.seek.Seeker;
+
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -24,11 +18,7 @@ import java.util.TreeMap;
  * This class coordinates the seeking process, event firing, and context matching.
  */
 @ApplicationScoped
-public class Extermination {
-    /** Configuration for throttling and other settings. */
-    @Inject
-    private ExterminateConfig config;
-
+public class Seekers {
     /** Configuration for seek inclusion/exclusion. */
     @Inject
     private SeekConfig seekConfig;
@@ -37,12 +27,6 @@ public class Extermination {
     @Inject
     @Any
     private Instance<Seeker> seekerInstance;
-
-    /** CDI event for SeekEvent. */
-    @Inject
-    private Event<SeekEvent> seekEvent;
-
-
 
     /**
      * Checks if the given seek context is excluded by configuration.
@@ -79,7 +63,10 @@ public class Extermination {
 
 
     /**
-     * Utility method to compare two context maps for equality.
+     * Compares two context maps for equality.
+     * @param configMap configuration context map
+     * @param seekMap seek context map
+     * @return true if maps are equal, false otherwise
      */
     private boolean equals(final Map<String, String> configMap, final Map<String, String> seekMap) {
         return configMap.equals(seekMap);
@@ -117,12 +104,7 @@ public class Extermination {
      * Throttles execution according to configuration.
      */
     public void throttle() {
-        try {
-            Thread.sleep(1_000 * config.throttle());
-        } catch (InterruptedException e) {
-            Log.error("Throttle interrupted", e);
-            Thread.currentThread().interrupt();
-        }
+        throttle(1);
     }
 
 
@@ -140,7 +122,7 @@ public class Extermination {
         //TODO: Fire through CDI events seekEvent.fire(event);
         seeker.onSeek(event);
         var continuations = event.getContinuations();
-        Log.infof("Seeker [%s] produced [%s] continuations for context [%s]", seeker.getClass().getSimpleName(), continuations.size(), seekContext);
+        Log.infof("Seeker [%s] produced [%d] continuations for context [%s]", seeker.getClass().getSimpleName(), continuations.size(), seekContext);
         for (var continuation : continuations) {
             seek(continuation);
         }
@@ -187,6 +169,27 @@ public class Extermination {
         var result = seekerAttributes.isEmpty() && context.isEmpty();
         Log.tracef("  Overall match result: %s", result);
         return result;
+    }
+
+
+    public SeekConfig getConfig() {
+        return seekConfig;
+    }
+
+
+    public List<Seeker> getInstances() {
+        var seekers = seekerInstance.stream().toList();
+        return seekers;
+     }
+
+
+    public void throttle(int multiplier) {
+        try {
+            Thread.sleep(1_000 * seekConfig.throttle() * multiplier);
+        } catch (InterruptedException e) {
+            Log.error("Throttle interrupted", e);
+            Thread.currentThread().interrupt();
+        }
     }
 
 }
