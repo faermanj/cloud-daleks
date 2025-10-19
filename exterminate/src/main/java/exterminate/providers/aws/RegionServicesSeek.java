@@ -8,7 +8,6 @@ import static scar.seek.Seek.ANY;
 import scar.seek.SeekEvent;
 
 import static exterminate.scar.SeekSymbols.*;
-import static scar.seek.Seeker.*;
 
 @Dependent
 @Seek(name = PROVIDER, value = AWS)
@@ -17,8 +16,9 @@ import static scar.seek.Seeker.*;
 @Seek(name = REGION, value = ANY)
 public class RegionServicesSeek  extends ContinuationsSeeker {
     @Override
-    protected void onSeek(@Observes SeekEvent event) {
-        continueWith(event,"service", "cloudformation",
+    public void onSeek(@Observes SeekEvent event) {
+        event.continueWith(
+            "service", "cloudformation",
             "resourceType", "stack");
     }
 }

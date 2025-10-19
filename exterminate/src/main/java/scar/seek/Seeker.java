@@ -1,3 +1,7 @@
 package scar.seek;
 
-public interface Seeker  {}
+import jakarta.enterprise.event.Observes;
+
+public interface Seeker  {
+    void onSeek(@Observes SeekEvent event); 
+}

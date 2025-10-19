@@ -2,6 +2,9 @@
 package exterminate.providers.aws;
 
 import static exterminate.scar.SeekSymbols.PROVIDER;
+
+import io.quarkus.logging.Log;
+
 import static exterminate.scar.SeekSymbols.AWS;
 
 import jakarta.enterprise.context.Dependent;
@@ -27,9 +30,11 @@ public class AWSSeek extends ContinuationsSeeker {
     @Override
     public void onSeek(@Observes SeekEvent event) {
         // Adds AWS EC2 region continuation to the event
-        continueWith(event, "service", "ec2",
+        event.continueWith("service", "ec2",
             "resourceType", "region");
         // If needed, use event.getSeekContext() for context-specific logic
+        var count = event.getContinuations().size();
+        Log.infof("AWSSeek added [%d] continuations.", count);
     }
 }
 

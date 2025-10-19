@@ -50,4 +50,20 @@ public class SeekEvent {
     public List<SeekContext> with(String k, String v) {
         return seekContext.with(k,v);
     }
+
+    public void continueWith(String k1, String v1, String k2, String v2) {
+        var context = getSeekContext();
+        var continuations = context.with(k1, v1, k2, v2);
+        continuations.forEach(this::addContinuation);
+    }
+
+    private void addContinuation(SeekContext context) {
+        continuations.add(context);
+    }
+
+    public void continueWith(String k, String v) {
+        var context = getSeekContext();
+        var continuations = context.with(k, v);
+        continuations.forEach(this::addContinuation);
+    }
 }

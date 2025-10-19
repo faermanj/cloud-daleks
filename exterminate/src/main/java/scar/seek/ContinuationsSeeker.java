@@ -9,8 +9,6 @@ import io.quarkus.logging.Log;
 import jakarta.enterprise.event.Observes;
 
 public abstract class ContinuationsSeeker implements Seeker {
-    // Fields
-    protected final List<SeekContext> continuations = new ArrayList<>();
 
     // Public methods
     @Override
@@ -35,31 +33,10 @@ public abstract class ContinuationsSeeker implements Seeker {
         return sb.toString();
     }
 
-    // Protected methods
-    protected void addall(List<SeekContext> continuations) {
-        this.continuations.addAll(continuations);
-    }
-
-    protected void continueWith(List<SeekContext> continuations) {
-        addall(continuations);
-    }
-
-    //TODO: Deduplicate code
-    protected void continueWith(SeekEvent event, String k1, String v1) {
-        var context = event.getSeekContext();
-        var continuations = context.with(k1, v1);
-        addall(continuations);
-    }
-
-    protected void continueWith(SeekEvent event, String k1, String v1, String k2, String v2) {
-        var context = event.getSeekContext();
-        var continuations = context.with(k1, v1, k2, v2);
-        addall(continuations);
-    }
-
-    // Package-private methods
-    protected void onSeek(@Observes SeekEvent event) {
+    public void onSeek(@Observes SeekEvent event) {
         Log.warn("Empty onSeek() listener.");
     }
+
+
 }
 

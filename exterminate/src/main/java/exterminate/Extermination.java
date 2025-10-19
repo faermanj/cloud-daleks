@@ -132,12 +132,13 @@ public class Extermination {
      * @param seekContext the context to seek
      */
     private void fire(final Seeker seeker, final SeekContext seekContext) {
-        Log.infof("Running seeker [%s] with context [%s]", seeker.getClass().getSimpleName(), seekContext);
+        Log.infof("Running seeker [%s] with context [%s]", seeker.toString(), seekContext);
         // Create SeekEvent and fire it via CDI Event system
         // This allows other beans to observe seek events and react accordingly.
         // Collect continuations from all event observers and run seek on them
         var event = SeekEvent.of(seekContext);
-        seekEvent.fire(event);
+        //TODO: Fire through CDI events seekEvent.fire(event);
+        seeker.onSeek(event);
         var continuations = event.getContinuations();
         Log.infof("Seeker [%s] produced [%s] continuations for context [%s]", seeker.getClass().getSimpleName(), continuations.size(), seekContext);
         for (var continuation : continuations) {
